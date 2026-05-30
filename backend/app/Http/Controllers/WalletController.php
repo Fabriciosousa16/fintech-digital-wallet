@@ -23,16 +23,26 @@ class WalletController extends Controller
 
         $wallet = $request->user()->wallet;
 
-        $wallet = $this->walletService->deposit(
-            $wallet,
-            $request->amount
-        );
+        try {
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Depósito realizado com sucesso',
-            'data' => $wallet
-        ]);
+            $wallet = $this->walletService->deposit(
+                $wallet,
+                $request->amount
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Depósito realizado com sucesso',
+                'data' => $wallet
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 
     public function withdraw(Request $request)
@@ -43,15 +53,25 @@ class WalletController extends Controller
 
         $wallet = $request->user()->wallet;
 
-        $wallet = $this->walletService->withdraw(
-            $wallet,
-            $request->amount
-        );
+        try {
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Saque realizado com sucesso',
-            'data' => $wallet
-        ]);
+            $wallet = $this->walletService->withdraw(
+                $wallet,
+                $request->amount
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Saque realizado com sucesso',
+                'data' => $wallet
+            ]);
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
+        }
     }
 }
